@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>XXX H4X - Tự động cập nhật video</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="video.js"></script>
+</head>
+<body>
+  <header class="header">
+    <h1 class="logo">XXX H4X</h1>
+    <div class="header-actions">
+      <span class="theme-toggle" id="themeToggle">🌙</span>
+      <span class="user-icon">👤</span>
+    </div>
+  </header>
+
+  <main class="main-content" id="videoContainer">
+    </main>
+
+  <script>
+    // Chuyển sáng/tối
+    const body = document.body;
+    const toggle = document.getElementById("themeToggle");
+
+    function updateIcon() {
+      toggle.textContent = body.classList.contains("light") ? "☀️" : "🌙";
+    }
+
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "light") {
+      body.classList.add("light");
+    } else if (!savedTheme) {
+      const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+      if (prefersLight) body.classList.add("light");
+    }
+    updateIcon();
+
+    toggle.addEventListener("click", () => {
+      body.classList.toggle("light");
+      localStorage.setItem("theme", body.classList.contains("light") ? "light" : "dark");
+      updateIcon();
+    });
+
+    // Tự động hiển thị video từ video.js
+    const container = document.getElementById("videoContainer");
+    videos.forEach((video, index) => {
+      const section = document.createElement("section");
+      section.className = "post";
+      section.innerHTML = `
+        <div class="post-time">Video ${index + 1}</div>
+        <div class="post-body">
+          <p>${video.title}</p>
+          <iframe src="${video.url.replace("mega.nz/file/", "mega.nz/embed/")}" frameborder="0" allowfullscreen></iframe>
+        </div>
+      `;
+      container.appendChild(section);
+    });
+  </script>
+</body>
+</html>
